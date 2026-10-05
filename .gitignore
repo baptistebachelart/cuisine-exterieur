@@ -1,0 +1,36 @@
+# Dépendances
+node_modules/
+.pnp
+.pnp.js
+
+# Environnement et Secrets (Zéro Fuite)
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+*.cert
+credentials/
+config.json
+*token*.json
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# IDE & Editeurs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Antigravity Brain / Temp
+.agent/scratch/
+.system_generated/
