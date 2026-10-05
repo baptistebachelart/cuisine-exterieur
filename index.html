@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cuisine Extérieure Rooftop Lyon • Plans & Modélisation 3D</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Three.js + OrbitControls -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen selection:bg-orange-500 selection:text-white">
+
+  <!-- NAVIGATION FIXE -->
+  <header class="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-orange-600 to-amber-500 flex items-center justify-center text-white shadow-lg shadow-orange-500/20">
+          <i class="fa-solid fa-fire text-lg"></i>
+        </div>
+        <div>
+          <span class="text-xs uppercase tracking-widest font-bold text-orange-400 block leading-none">Chantier J-14</span>
+          <h1 class="font-extrabold text-base sm:text-lg text-white leading-tight">Cuisine Rooftop Lyon • 3.00 m</h1>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="hidden md:flex items-center gap-1 bg-slate-950/60 p-1.5 rounded-xl border border-slate-800 text-xs font-semibold">
+        <button onclick="setTab('rendus')" id="tab-rendus" class="nav-tab px-3 py-1.5 rounded-lg text-white bg-orange-600 shadow transition flex items-center gap-1.5">
+          <i class="fa-solid fa-image"></i> Visuels 3D
+        </button>
+        <button onclick="setTab('3d')" id="tab-3d" class="nav-tab px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition flex items-center gap-1.5">
+          <i class="fa-solid fa-cube"></i> Maquette 3D Interactive
+        </button>
+        <button onclick="setTab('plans')" id="tab-plans" class="nav-tab px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition flex items-center gap-1.5">
+          <i class="fa-solid fa-compass-drafting"></i> Plans Cotés (Coupe & Face)
+        </button>
+        <button onclick="setTab('materiel')" id="tab-materiel" class="nav-tab px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition flex items-center gap-1.5">
+          <i class="fa-solid fa-cart-shopping"></i> Matériel Leroy Merlin
+        </button>
+        <button onclick="setTab('guide')" id="tab-guide" class="nav-tab px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition flex items-center gap-1.5">
+          <i class="fa-solid fa-list-check"></i> Étapes de Montage
+        </button>
+      </nav>
+
+      <div class="flex items-center gap-2">
+        <a href="#materiel" onclick="setTab('materiel')" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-md shadow-emerald-600/20">
+          <i class="fa-solid fa-print"></i> Liste Courses
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENU PRINCIPAL -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8">
+
+    <!-- BANDEAU SYNTHÈSE CLÉ -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <div class="glass-card p-4 rounded-2xl flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center text-lg"><i class="fa-solid fa-ruler-horizontal"></i></div>
+        <div>
+          <div class="text-[11px] text-slate-400 uppercase font-semibold">Largeur Totale</div>
+          <div class="text-base sm:text-lg font-extrabold text-white">3,00 m (6 dalles)</div>
+        </div>
+      </div>
+      <div class="glass-card p-4 rounded-2xl flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-orange-500/10 text-orange-400 flex items-center justify-center text-lg"><i class="fa-solid fa-arrows-up-down"></i></div>
+        <div>
+          <div class="text-[11px] text-slate-400 uppercase font-semibold">Vide Sous Dalle</div>
+          <div class="text-base sm:text-lg font-extrabold text-orange-400">-25 cm (1 bloc)</div>
+        </div>
+      </div>
+      <div class="glass-card p-4 rounded-2xl flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-lg"><i class="fa-solid fa-arrows-turn-right"></i></div>
+        <div>
+          <div class="text-[11px] text-slate-400 uppercase font-semibold">Profondeur Plan</div>
+          <div class="text-base sm:text-lg font-extrabold text-emerald-400">70 cm utile</div>
+        </div>
+      </div>
+      <div class="glass-card p-4 rounded-2xl flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-lg"><i class="fa-solid fa-cubes"></i></div>
+        <div>
+          <div class="text-[11px] text-slate-400 uppercase font-semibold">Coupe Verticale</div>
+          <div class="text-base sm:text-lg font-extrabold text-purple-400">Zéro Coupe (H:25cm)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 1 : VISUELS 3D & PHOTOS -->
+    <section id="section-rendus" class="tab-content space-y-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-xl font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-photo-film text-orange-500"></i> Rendu Réaliste Final & Projet
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-400">Intégration du meuble béton ciré, du four Vonken à gauche et du Kokko décaissé à droite.</p>
+        </div>
+      </div>
+
+      <!-- Grande photo Rendu Final -->
+      <div class="relative group rounded-3xl overflow-hidden border border-slate-800 shadow-2xl bg-slate-900">
+        <img src="assets/images/rendu-3d-final.jpg" alt="Rendu 3D Cuisine Extérieure" class="w-full h-auto object-cover max-h-[600px]">
+        <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-transparent p-6 sm:p-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+          <div>
+            <span class="inline-block px-3 py-1 bg-orange-600/90 text-white rounded-full text-xs font-bold tracking-wide uppercase mb-2 shadow">
+              Rendu Architecture Conforme
+            </span>
+            <h3 class="text-lg sm:text-2xl font-black text-white">Établi Béton Ciré 3.00 m • Rooftop Lyon</h3>
+            <p class="text-xs sm:text-sm text-slate-300 max-w-2xl mt-1">
+              Implantation avec four Vonken Urban sur placard gaz fermé (gauche), grand plan central en béton ciré avec étagères en teck (milieu), et niche basse recevant le Kamado Kokko à hauteur de grille idéale.
+            </p>
+          </div>
+          <button onclick="setTab('3d')" class="px-5 py-2.5 bg-white text-slate-950 font-bold rounded-xl text-xs hover:bg-orange-500 hover:text-white transition shadow-lg shrink-0 flex items-center gap-2">
+            <i class="fa-solid fa-cube"></i> Explorer en 3D
+          </button>
+        </div>
+      </div>
+
+      <!-- Comparatif Avant / Concept -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="glass-card rounded-2xl overflow-hidden border border-slate-800 p-4 space-y-3">
+          <div class="flex items-center justify-between text-xs font-bold text-slate-400">
+            <span>📸 SITUATION ACTUELLE DE LA TERRASSE</span>
+            <span class="text-orange-400">Ligne 2 à déposer</span>
+          </div>
+          <img src="assets/images/photo-avant.jpg" alt="Terrasse Actuelle" class="w-full h-64 object-cover rounded-xl">
+          <p class="text-xs text-slate-400">
+            On retire les végétaux, le chariot roulant oxydé, et la ligne de dalles 50×50 cm sur 3 mètres pour descendre l'assise au fond du vide de 25 cm.
+          </p>
+        </div>
+
+        <div class="glass-card rounded-2xl overflow-hidden border border-slate-800 p-4 space-y-3">
+          <div class="flex items-center justify-between text-xs font-bold text-slate-400">
+            <span>✨ CONCEPTION MODULAIRE ÉTÉ</span>
+            <span class="text-emerald-400">Finition Béton Ciré Clair</span>
+          </div>
+          <img src="assets/images/rendu-3d-concept.jpg" alt="Concept Cuisine" class="w-full h-64 object-cover rounded-xl">
+          <p class="text-xs text-slate-400">
+            Matériaux pérennes résistants aux intempéries lyonnaises : micro-mortier béton ciré bi-composant extérieur hydrofuge et bois exotique imputrescible.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2 : MAQUETTE 3D INTERACTIVE (THREE.JS) -->
+    <section id="section-3d" class="tab-content hidden space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h2 class="text-xl font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-cubes text-blue-400"></i> Maquette 3D Interactive
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-400">Pivotez (clic gauche), zoomez (molette) et déplacez (clic droit) pour inspecter l'assemblage sous tous les angles.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="btn-toggle-void" onclick="toggleVoidVisibility()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-xs font-semibold rounded-lg border border-slate-700 text-slate-200 flex items-center gap-1.5">
+            <i class="fa-solid fa-eye"></i> Afficher/Masquer Dalles
+          </button>
+          <button onclick="reset3DCamera()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-xs font-semibold rounded-lg border border-slate-700 text-slate-200 flex items-center gap-1.5">
+            <i class="fa-solid fa-rotate-left"></i> Recentrer
+          </button>
+        </div>
+      </div>
+
+      <!-- 3D Canvas Container -->
+      <div class="relative w-full h-[520px] rounded-3xl overflow-hidden border border-slate-800 bg-slate-900 shadow-2xl">
+        <div id="canvas-3d-container" class="w-full h-full cursor-grab active:cursor-grabbing"></div>
+
+        <!-- Légende overlay -->
+        <div class="absolute bottom-4 left-4 glass-card p-3 rounded-xl text-xs space-y-1.5 max-w-xs pointer-events-none">
+          <div class="font-bold text-slate-200">Légende Maquette :</div>
+          <div class="flex items-center gap-2 text-slate-400"><span class="w-3 h-3 rounded bg-slate-400 inline-block"></span> Béton ciré (Structure Siporex)</div>
+          <div class="flex items-center gap-2 text-slate-400"><span class="w-3 h-3 rounded bg-red-600 inline-block"></span> Kamado Kokko (Céramique rouge)</div>
+          <div class="flex items-center gap-2 text-slate-400"><span class="w-3 h-3 rounded bg-slate-800 inline-block"></span> Four Vonken Urban (Noir mat)</div>
+          <div class="flex items-center gap-2 text-slate-400"><span class="w-3 h-3 rounded bg-amber-600 inline-block"></span> Étagères bois teck</div>
+          <div class="flex items-center gap-2 text-slate-400"><span class="w-3 h-3 rounded bg-blue-500/40 inline-block"></span> Dalles terrasse 50x50 cm</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3 : PLANS TECHNIQUES COTÉS -->
+    <section id="section-plans" class="tab-content hidden space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h2 class="text-xl font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-ruler-combined text-emerald-400"></i> Plans Techniques & Cotes d'Exécution
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-400">Calepinage précis des niveaux verticaux et des 4 alvéoles horizontales.</p>
+        </div>
+        <div class="flex gap-2">
+          <button onclick="setPlanSubTab('coupe')" id="subtab-coupe" class="plan-sub-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-blue-600 text-white shadow">1. Coupe de Profil (Vide 25cm)</button>
+          <button onclick="setPlanSubTab('face')" id="subtab-face" class="plan-sub-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-800 text-slate-400 hover:text-white">2. Vue de Face (3.00 m)</button>
+          <button onclick="setPlanSubTab('dessus')" id="subtab-dessus" class="plan-sub-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-800 text-slate-400 hover:text-white">3. Vue de Dessus (70 cm)</button>
+        </div>
+      </div>
+
+      <!-- Plan 1 : Coupe -->
+      <div id="plan-view-coupe" class="glass-card rounded-2xl p-5 border border-slate-800 space-y-4">
+        <div class="flex justify-between items-center text-xs">
+          <span class="font-extrabold text-slate-200 uppercase">Coupe Transversale • Gestion du Vide d'Air & Étanchéité</span>
+          <span class="text-emerald-400 font-semibold">1 bloc sous dalle = Niveau 0 affleurant</span>
+        </div>
+        <div class="w-full overflow-x-auto">
+          <svg viewBox="0 0 920 440" class="w-full min-w-[700px] h-auto select-none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="920" height="440" fill="#090d16" rx="8" />
+            <!-- Paroi vitrée mitoyenne -->
+            <rect x="70" y="40" width="16" height="300" fill="#64748b" stroke="#94a3b8" />
+            <text x="78" y="190" fill="#cbd5e1" font-size="10" font-weight="bold" transform="rotate(-90 78 190)" text-anchor="middle">VITRAGE DÉPOLI MITOYEN (VOISIN)</text>
+            <!-- Ligne 1 dalle -->
+            <rect x="86" y="240" width="160" height="15" fill="#334155" stroke="#475569" />
+            <text x="166" y="252" fill="#cbd5e1" font-size="10" font-weight="bold" text-anchor="middle">LIGNE 1 CONSERVÉE (50 cm)</text>
+            <rect x="150" y="255" width="30" height="85" fill="#1e293b" />
+            <!-- Membrane étanche de l'immeuble -->
+            <rect x="40" y="340" width="840" height="30" fill="#1e293b" />
+            <line x1="40" y1="340" x2="880" y2="340" stroke="#ef4444" stroke-width="3" />
+            <text x="460" y="360" fill="#fca5a5" font-size="10" font-weight="bold" text-anchor="middle">MEMBRANE D'ÉTANCHÉITÉ BITUMINEUSE ROOFTOP (NIVEAU -25 CM)</text>
+            <!-- Patin EPDM -->
+            <rect x="270" y="330" width="220" height="10" fill="#10b981" rx="2" />
+            <text x="380" y="338" fill="#022c22" font-size="8" font-weight="bold" text-anchor="middle">Patin EPDM 10mm (Drainage)</text>
+            <!-- Bloc Rang 1 sous dalle -->
+            <rect x="270" y="240" width="220" height="90" fill="#94a3b8" stroke="#0f172a" stroke-width="1.5" />
+            <text x="380" y="285" fill="#0f172a" font-size="11" font-weight="bold" text-anchor="middle">RANG 1 SIPOREX (-25 à 0 cm)</text>
+            <text x="380" y="300" fill="#334155" font-size="9" text-anchor="middle">Pose dans le vide • Sommet affleurant dalles</text>
+            <!-- Ligne de niveau 0 -->
+            <line x1="40" y1="240" x2="880" y2="240" stroke="#38bdf8" stroke-width="2" stroke-dasharray="5" />
+            <text x="760" y="232" fill="#38bdf8" font-size="11" font-weight="bold">SOL FINI DALLES (NIV. 0.00)</text>
+            <!-- Dalle circulation devant -->
+            <rect x="500" y="240" width="240" height="15" fill="#334155" stroke="#475569" />
+            <text x="620" y="252" fill="#cbd5e1" font-size="10" font-weight="bold" text-anchor="middle">DALLES CIRCULATION TERRASSE</text>
+            <!-- Rangs au-dessus -->
+            <rect x="270" y="170" width="220" height="70" fill="#cbd5e1" stroke="#0f172a" stroke-width="1.5" />
+            <text x="380" y="208" fill="#0f172a" font-size="10" font-weight="bold" text-anchor="middle">RANG 2 (+0 à +25 cm)</text>
+            <rect x="270" y="100" width="220" height="70" fill="#94a3b8" stroke="#0f172a" stroke-width="1.5" />
+            <text x="380" y="138" fill="#0f172a" font-size="10" font-weight="bold" text-anchor="middle">RANG 3 (+25 à +50 cm)</text>
+            <rect x="270" y="65" width="220" height="35" fill="#cbd5e1" stroke="#0f172a" stroke-width="1.5" />
+            <text x="380" y="85" fill="#0f172a" font-size="9" font-weight="bold" text-anchor="middle">RANG 4 (Haut jambage +75 cm)</text>
+            <!-- Plan béton ciré -->
+            <rect x="250" y="40" width="260" height="25" fill="#f8fafc" stroke="#0f172a" stroke-width="2" rx="4" />
+            <text x="380" y="57" fill="#0f172a" font-size="11" font-weight="bold" text-anchor="middle">PLAN BÉTON CIRÉ (70 cm de profondeur)</text>
+            <!-- Cotes -->
+            <line x1="230" y1="240" x2="230" y2="330" stroke="#ef4444" stroke-width="2" />
+            <text x="220" y="285" fill="#ef4444" font-size="11" font-weight="bold" text-anchor="end">-25 cm</text>
+            <line x1="530" y1="40" x2="530" y2="240" stroke="#10b981" stroke-width="2" />
+            <text x="545" y="145" fill="#10b981" font-size="11" font-weight="bold">+88 cm au sol</text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Plan 2 : Face -->
+      <div id="plan-view-face" class="hidden glass-card rounded-2xl p-5 border border-slate-800 space-y-4">
+        <div class="flex justify-between items-center text-xs">
+          <span class="font-extrabold text-slate-200 uppercase">Élévation Frontale • 3.00 m (6 Dalles de 50 cm)</span>
+          <span class="text-blue-400 font-semibold">5 Jambages Siporex 10 cm • 4 Alvéoles</span>
+        </div>
+        <div class="w-full overflow-x-auto">
+          <svg viewBox="0 0 960 400" class="w-full min-w-[750px] h-auto select-none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="960" height="400" fill="#090d16" rx="8" />
+            <!-- Sol terrasse niveau 0 -->
+            <line x1="20" y1="310" x2="940" y2="310" stroke="#38bdf8" stroke-width="2" stroke-dasharray="5" />
+            <text x="30" y="302" fill="#38bdf8" font-size="11" font-weight="bold">SOL DALLES (NIV. 0.00)</text>
+            <!-- Niveau -25 cm -->
+            <line x1="20" y1="365" x2="940" y2="365" stroke="#ef4444" stroke-width="2" />
+            <text x="30" y="380" fill="#f87171" font-size="10">Fond étanchéité (-25 cm)</text>
+            <!-- Jambages -->
+            <g fill="#cbd5e1" stroke="#0f172a" stroke-width="1.5">
+              <rect x="30" y="90" width="28" height="275" rx="2" />
+              <rect x="250" y="90" width="28" height="275" rx="2" />
+              <rect x="470" y="115" width="24" height="250" rx="2" />
+              <rect x="670" y="90" width="28" height="275" rx="2" />
+              <rect x="900" y="90" width="28" height="275" rx="2" />
+            </g>
+            <!-- Four Vonken à gauche -->
+            <rect x="58" y="90" width="192" height="25" fill="#94a3b8" stroke="#0f172a" />
+            <rect x="80" y="25" width="145" height="65" fill="#1e293b" stroke="#f97316" stroke-width="2" rx="6" />
+            <line x1="150" y1="25" x2="150" y2="-5" stroke="#f97316" stroke-width="6" />
+            <text x="150" y="60" fill="#f97316" font-size="11" font-weight="bold" text-anchor="middle">VONKEN URBAN</text>
+            <rect x="120" y="190" width="65" height="110" fill="#0284c7" rx="8" />
+            <text x="152" y="250" fill="#ffffff" font-size="9" text-anchor="middle">Bouteille Gaz</text>
+            <!-- Plan de travail central -->
+            <rect x="278" y="90" width="392" height="25" fill="#94a3b8" stroke="#0f172a" />
+            <text x="474" y="107" fill="#0f172a" font-size="12" font-weight="bold" text-anchor="middle">PLAN PRÉPARATION BÉTON CIRÉ (125 cm)</text>
+            <!-- Étagères bois -->
+            <rect x="278" y="200" width="192" height="15" fill="#b45309" rx="2" />
+            <rect x="494" y="200" width="176" height="15" fill="#b45309" rx="2" />
+            <text x="374" y="212" fill="#fef3c7" font-size="9" font-weight="bold" text-anchor="middle">Teck</text>
+            <text x="582" y="212" fill="#fef3c7" font-size="9" font-weight="bold" text-anchor="middle">Teck</text>
+            <!-- Kokko décaissé à droite -->
+            <rect x="698" y="200" width="202" height="25" fill="#94a3b8" stroke="#0f172a" />
+            <text x="800" y="217" fill="#0f172a" font-size="10" font-weight="bold" text-anchor="middle">Support Kokko (+45 cm)</text>
+            <path d="M 725,190 C 715,90 885,90 875,190 Z" fill="#ef4444" stroke="#991b1b" stroke-width="2.5" />
+            <ellipse cx="800" cy="190" rx="72" ry="12" fill="#dc2626" stroke="#991b1b" stroke-width="2" />
+            <text x="800" y="140" fill="#ffffff" font-size="11" font-weight="bold" text-anchor="middle">KOKKO (Grille à 88cm)</text>
+            <!-- Largeur totale 3.00m -->
+            <line x1="30" y1="65" x2="928" y2="65" stroke="#38bdf8" stroke-width="2" />
+            <text x="479" y="58" fill="#38bdf8" font-size="12" font-weight="bold" text-anchor="middle">LARGEUR TOTALE : 3,00 MÈTRES</text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Plan 3 : Dessus -->
+      <div id="plan-view-dessus" class="hidden glass-card rounded-2xl p-5 border border-slate-800 space-y-4">
+        <div class="flex justify-between items-center text-xs">
+          <span class="font-extrabold text-slate-200 uppercase">Vue de Dessus • Implantation et Circulation</span>
+          <span class="text-purple-400 font-semibold">Profondeur 70 cm</span>
+        </div>
+        <div class="w-full overflow-x-auto">
+          <svg viewBox="0 0 960 280" class="w-full min-w-[700px] h-auto select-none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="960" height="280" fill="#090d16" rx="8" />
+            <rect x="30" y="20" width="900" height="12" fill="#64748b" opacity="0.6" rx="2" />
+            <text x="480" y="30" fill="#e2e8f0" font-size="9" text-anchor="middle">PAROI VITRÉE MITOYENNE VOISIN</text>
+            <!-- Ligne 1 conservée (6 dalles) -->
+            <g stroke="#334155" stroke-width="1.5">
+              <rect x="30" y="40" width="150" height="60" fill="#1e293b" />
+              <rect x="180" y="40" width="150" height="60" fill="#1e293b" />
+              <rect x="330" y="40" width="150" height="60" fill="#1e293b" />
+              <rect x="480" y="40" width="150" height="60" fill="#1e293b" />
+              <rect x="630" y="40" width="150" height="60" fill="#1e293b" />
+              <rect x="780" y="40" width="150" height="60" fill="#1e293b" />
+            </g>
+            <text x="480" y="75" fill="#64748b" font-size="10" text-anchor="middle">LIGNE 1 CONSERVÉE (6 DALLES DE 50×50 CM)</text>
+            <!-- Plan de travail -->
+            <rect x="30" y="110" width="900" height="145" fill="#cbd5e1" stroke="#0f172a" stroke-width="2" rx="4" />
+            <rect x="60" y="125" width="130" height="115" fill="#1e293b" stroke="#f97316" stroke-width="2" rx="6" />
+            <circle cx="125" cy="150" r="12" fill="#f97316" />
+            <text x="125" y="195" fill="#ffffff" font-size="10" font-weight="bold" text-anchor="middle">VONKEN</text>
+            <text x="460" y="180" fill="#334155" font-size="12" font-weight="bold" text-anchor="middle">ZONE DE DÉCOUPE BÉTON CIRÉ</text>
+            <circle cx="785" cy="182" r="62" fill="#ef4444" stroke="#991b1b" stroke-width="2.5" />
+            <text x="785" y="187" fill="#ffffff" font-size="11" font-weight="bold" text-anchor="middle">KOKKO (Ø 58cm)</text>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4 : MATÉRIEL LEROY MERLIN & CHECKLIST CHANTIER -->
+    <section id="section-materiel" class="tab-content hidden space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h2 class="text-xl font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-cart-flatbed text-orange-400"></i> Liste des Matériaux & Devis Estimatif
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-400">Pour votre commande chez Leroy Merlin / Castorama avant le week-end chantier.</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="text-xs font-bold text-emerald-400 bg-emerald-950/80 border border-emerald-700/60 px-3 py-1.5 rounded-xl">
+            Total Estimé : ~340 € TTC
+          </span>
+          <button onclick="window.print()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-xs font-semibold rounded-lg text-slate-300 transition flex items-center gap-1.5">
+            <i class="fa-solid fa-print"></i> Imprimer
+          </button>
+        </div>
+      </div>
+
+      <div class="glass-card rounded-2xl overflow-hidden border border-slate-800 p-5 space-y-4">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs sm:text-sm text-slate-300">
+            <thead class="bg-slate-900/90 text-slate-400 uppercase text-[10px] tracking-wider">
+              <tr>
+                <th class="p-3">Statut</th>
+                <th class="p-3">Désignation</th>
+                <th class="p-3">Usage Technique</th>
+                <th class="p-3 text-center">Quantité</th>
+                <th class="p-3 text-right">Prix Est.</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800/80">
+              <tr class="hover:bg-slate-800/30 transition">
+                <td class="p-3"><input type="checkbox" class="rounded accent-orange-500 w-4 h-4 cursor-pointer"></td>
+                <td class="p-3 font-bold text-white">Blocs Béton Cellulaire (Siporex) 62,5 × 25 × 10 cm</td>
+                <td class="p-3 text-slate-400">5 Jambages porteurs (du vide -25cm jusqu'à +75cm)</td>
+                <td class="p-3 text-center font-bold text-orange-400">20 blocs</td>
+                <td class="p-3 text-right font-semibold text-slate-200">~60 €</td>
+              </tr>
+              <tr class="hover:bg-slate-800/30 transition">
+                <td class="p-3"><input type="checkbox" class="rounded accent-orange-500 w-4 h-4 cursor-pointer"></td>
+                <td class="p-3 font-bold text-white">Dalles Siporex 62,5 × 25 × 7 ou 10 cm</td>
+                <td class="p-3 text-slate-400">Plateau sous Vonken, central et tablette décaissée Kokko</td>
+                <td class="p-3 text-center font-bold text-orange-400">12 blocs</td>
+                <td class="p-3 text-right font-semibold text-slate-200">~40 €</td>
+              </tr>
+              <tr class="hover:bg-slate-800/30 transition">
+                <td class="p-3"><input type="checkbox" class="rounded accent-orange-500 w-4 h-4 cursor-pointer"></td>
+                <td class="p-3 font-bold text-white">Cornières / Fers plats acier 40 × 4 mm (Barres 2m)</td>
+                <td class="p-3 text-slate-400">Armatures anti-flexion sous les plateaux Siporex</td>
+                <td class="p-3 text-center font-bold text-orange-400">3 barres</td>
+                <td class="p-3 text-right font-semibold text-slate-200">~35 €</td>
+              </tr>
+              <tr class="hover:bg-slate-800/30 transition">
+                <td class="p-3"><input type="checkbox" class="rounded accent-orange-500 w-4 h-4 cursor-pointer"></td>
+                <td class="p-3 font-bold text-white">Patins d'isolation résilients EPDM 100 × 100 × 10 mm</td>
+                <td class="p-3 text-slate-400">Assise au fond du vide (-25cm) sur l'étanchéité</td>
+                <td class="p-3 text-center font-bold text-orange-400">10 patins</td>
+                <td class="p-3 text-right font-semibold text-slate-200">~20 €</td>
+              </tr>
+              <tr class="hover:bg-slate-800/30 transition">
+                <td class="p-3"><input type="checkbox" class="rounded accent-orange-500 w-4 h-4 cursor-pointer"></td>
+                <td class="p-3 font-bold text-white">Mortier-colle pour béton cellulaire (Sacs de 25 kg)</td>
+                <td class="p-3 text-slate-400">Collage joint mince de tous les blocs</td>
+                <td class="p-3 text-center font-bold text-orange-400">2 sacs</td>
+                <td class="p-3 text-right font-semibold text-slate-200">~25 €</td>
+              </tr>
+              <tr class="hover:bg-slate-800/30 transition">
+                <td class="p-3"><input type="checkbox" class="rounded accent-orange-500 w-4 h-4 cursor-pointer"></td>
+                <td class="p-3 font-bold text-white">Kit Béton Ciré Extérieur Haute Résistance (8 m²)</td>
+                <td class="p-3 text-slate-400">Primaire + Trame fibre + 2 passes béton + Vernis PU Bi-composant</td>
+                <td class="p-3 text-center font-bold text-orange-400">1 kit complet</td>
+                <td class="p-3 text-right font-semibold text-slate-200">~140 €</td>
+              </tr>
+              <tr class="hover:bg-slate-800/30 transition">
+                <td class="p-3"><input type="checkbox" class="rounded accent-orange-500 w-4 h-4 cursor-pointer"></td>
+                <td class="p-3 font-bold text-white">Planches de teck ou chêne pour étagères</td>
+                <td class="p-3 text-slate-400">Plateaux ajourés pour niches centrales</td>
+                <td class="p-3 text-center font-bold text-orange-400">2 étagères</td>
+                <td class="p-3 text-right font-semibold text-slate-200">~40 €</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5 : ÉTAPES DE MONTAGE -->
+    <section id="guide" class="tab-content hidden space-y-6">
+      <div>
+        <h2 class="text-xl font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-hammer text-amber-400"></i> Déroulé du Chantier (Week-end Père & Fils)
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-400">Planning de montage optimisé pour 2 jours de travaux.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="glass-card p-5 rounded-2xl border border-slate-800 space-y-3">
+          <div class="w-8 h-8 rounded-lg bg-orange-600/20 text-orange-400 flex items-center justify-center font-black text-sm">1</div>
+          <h3 class="font-bold text-white text-base">Samedi Matin : Préparation & Assise</h3>
+          <ul class="text-xs text-slate-300 space-y-2 list-disc list-inside">
+            <li>Dépose des 6 dalles de la Ligne 2.</li>
+            <li>Nettoyage et pose des patins EPDM au fond du vide (-25 cm).</li>
+            <li>Pose du 1er rang de Siporex de 25 cm dans le vide (arrive au ras du carrelage).</li>
+            <li>Vérification du niveau laser / bulle.</li>
+          </ul>
+        </div>
+
+        <div class="glass-card p-5 rounded-2xl border border-slate-800 space-y-3">
+          <div class="w-8 h-8 rounded-lg bg-blue-600/20 text-blue-400 flex items-center justify-center font-black text-sm">2</div>
+          <h3 class="font-bold text-white text-base">Samedi Après-midi : Élévation & Plateaux</h3>
+          <ul class="text-xs text-slate-300 space-y-2 list-disc list-inside">
+            <li>Montage des 3 rangs supérieurs au mortier-colle.</li>
+            <li>Encoches pour fers plats sous les plateaux.</li>
+            <li>Pose des dalles horizontales (Vonken à 88cm, Kokko à 45cm).</li>
+            <li>Pose de la trame en fibre de verre sur tous les angles.</li>
+          </ul>
+        </div>
+
+        <div class="glass-card p-5 rounded-2xl border border-slate-800 space-y-3">
+          <div class="w-8 h-8 rounded-lg bg-emerald-600/20 text-emerald-400 flex items-center justify-center font-black text-sm">3</div>
+          <h3 class="font-bold text-white text-base">Dimanche : Béton Ciré & Finitions</h3>
+          <ul class="text-xs text-slate-300 space-y-2 list-disc list-inside">
+            <li>Application du primaire d'accroche étanche.</li>
+            <li>Passe 1 & 2 de béton ciré à la lisseuse inox.</li>
+            <li>Bouche-pores et vernis polyuréthane bi-composant extérieur.</li>
+            <li>Installation du Kokko et du Vonken !</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- JAVASCRIPT APP & THREE.JS LOGIC -->
+  <script>
+    // GESTION DES ONGLETS
+    function setTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.nav-tab').forEach(el => {
+        el.className = "nav-tab px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition flex items-center gap-1.5";
+      });
+
+      const activeSection = document.getElementById('section-' + tabId);
+      if (activeSection) activeSection.classList.remove('hidden');
+
+      const activeBtn = document.getElementById('tab-' + tabId);
+      if (activeBtn) {
+        activeBtn.className = "nav-tab px-3 py-1.5 rounded-lg text-white bg-orange-600 shadow transition flex items-center gap-1.5";
+      }
+
+      if (tabId === '3d') {
+        setTimeout(init3D, 50);
+      }
+    }
+
+    function setPlanSubTab(sub) {
+      document.getElementById('plan-view-coupe').classList.add('hidden');
+      document.getElementById('plan-view-face').classList.add('hidden');
+      document.getElementById('plan-view-dessus').classList.add('hidden');
+
+      document.querySelectorAll('.plan-sub-btn').forEach(btn => {
+        btn.className = "plan-sub-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-800 text-slate-400 hover:text-white";
+      });
+
+      document.getElementById('plan-view-' + sub).classList.remove('hidden');
+      document.getElementById('subtab-' + sub).className = "plan-sub-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-blue-600 text-white shadow";
+    }
+
+    // --- THREE.JS MAQUETTE 3D ---
+    let scene, camera, renderer, controls;
+    let tilesGroup, isVoidVisible = true;
+    let is3DInitialized = false;
+
+    function init3D() {
+      if (is3DInitialized) return;
+      is3DInitialized = true;
+
+      const container = document.getElementById('canvas-3d-container');
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+
+      scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x0a0f1d);
+
+      camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
+      camera.position.set(2.5, 2.2, 3.8);
+
+      renderer = new THREE.WebGLRenderer({ antialias: true });
+      renderer.setSize(width, height);
+      renderer.setPixelRatio(window.devicePixelRatio);
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      container.appendChild(renderer.domElement);
+
+      controls = new THREE.OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.05;
+      controls.target.set(0, 0.4, 0);
+
+      // Lumières
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+      scene.add(ambientLight);
+
+      const dirLight = new THREE.DirectionalLight(0xfff5e6, 1.2);
+      dirLight.position.set(4, 6, 3);
+      dirLight.castShadow = true;
+      dirLight.shadow.mapSize.width = 1024;
+      dirLight.shadow.mapSize.height = 1024;
+      scene.add(dirLight);
+
+      const blueRim = new THREE.DirectionalLight(0x38bdf8, 0.4);
+      blueRim.position.set(-4, 3, -2);
+      scene.add(blueRim);
+
+      // Matériaux
+      const concreteMat = new THREE.MeshStandardMaterial({ color: 0xd1d5db, roughness: 0.6 });
+      const woodMat = new THREE.MeshStandardMaterial({ color: 0x9a3412, roughness: 0.7 });
+      const tileMat = new THREE.MeshStandardMaterial({ color: 0x475569, roughness: 0.8 });
+      const glassMat = new THREE.MeshPhysicalMaterial({ color: 0xe2e8f0, transmission: 0.8, opacity: 0.8, transparent: true, roughness: 0.3 });
+      const kokkoRedMat = new THREE.MeshStandardMaterial({ color: 0xdc2626, roughness: 0.3, metalness: 0.1 });
+      const ovenBlackMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.4, metalness: 0.6 });
+
+      // Paroi vitrée arrière (Ligne mitoyenne)
+      const glassGeo = new THREE.BoxGeometry(3.2, 1.6, 0.04);
+      const glassMesh = new THREE.Mesh(glassGeo, glassMat);
+      glassMesh.position.set(0, 0.8, -0.65);
+      scene.add(glassMesh);
+
+      // Sol terrasse (Dalles 50x50 cm sur plots)
+      tilesGroup = new THREE.Group();
+      // Ligne 1 (conservée)
+      for (let i = -3; i < 3; i++) {
+        const tile = new THREE.Mesh(new THREE.BoxGeometry(0.48, 0.04, 0.48), tileMat);
+        tile.position.set(i * 0.5 + 0.25, 0, -0.4);
+        tilesGroup.add(tile);
+      }
+      // Dalles avant (Ligne 3)
+      for (let i = -3; i < 3; i++) {
+        const tile = new THREE.Mesh(new THREE.BoxGeometry(0.48, 0.04, 0.48), tileMat);
+        tile.position.set(i * 0.5 + 0.25, 0, 0.45);
+        tilesGroup.add(tile);
+      }
+      scene.add(tilesGroup);
+
+      // Dalle béton du fond (-25 cm)
+      const subSlab = new THREE.Mesh(new THREE.BoxGeometry(3.6, 0.05, 1.8), new THREE.MeshStandardMaterial({ color: 0x1e293b }));
+      subSlab.position.set(0, -0.27, 0);
+      scene.add(subSlab);
+
+      // CUISINE EXTÉRIEURE (Largeur 3.00 m, Profondeur 0.70 m)
+      // 5 Jambages Siporex 10cm (qui partent de -0.25m jusqu'à +0.75m)
+      const jambageGeo = new THREE.BoxGeometry(0.1, 1.0, 0.65);
+      const jambagePositions = [-1.45, -0.75, 0.0, 0.65, 1.45];
+
+      jambagePositions.forEach(x => {
+        const jambage = new THREE.Mesh(jambageGeo, concreteMat);
+        jambage.position.set(x, 0.25, 0.0);
+        jambage.castShadow = true;
+        jambage.receiveShadow = true;
+        scene.add(jambage);
+      });
+
+      // Plateau Haut (Gauche & Centre : de -1.5m à +0.65m = longueur 2.15m)
+      const topGeo = new THREE.BoxGeometry(2.2, 0.1, 0.7);
+      const topMesh = new THREE.Mesh(topGeo, concreteMat);
+      topMesh.position.set(-0.4, 0.8, 0.0);
+      topMesh.castShadow = true;
+      scene.add(topMesh);
+
+      // Tablette basse Kokko (Droite : de +0.65m à +1.45m = décaissée à 0.45m)
+      const kokkoShelfGeo = new THREE.BoxGeometry(0.8, 0.08, 0.65);
+      const kokkoShelf = new THREE.Mesh(kokkoShelfGeo, concreteMat);
+      kokkoShelf.position.set(1.05, 0.45, 0.0);
+      scene.add(kokkoShelf);
+
+      // Étagères bois au centre
+      const woodShelf1 = new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.03, 0.6), woodMat);
+      woodShelf1.position.set(-0.37, 0.4, 0.0);
+      scene.add(woodShelf1);
+
+      const woodShelf2 = new THREE.Mesh(new THREE.BoxGeometry(0.6, 0.03, 0.6), woodMat);
+      woodShelf2.position.set(0.32, 0.4, 0.0);
+      scene.add(woodShelf2);
+
+      // KAMADO KOKKO (Ovoïde rouge)
+      const kokkoGroup = new THREE.Group();
+      const eggBody = new THREE.Mesh(new THREE.SphereGeometry(0.28, 24, 24), kokkoRedMat);
+      eggBody.scale.set(1, 1.25, 1);
+      eggBody.position.y = 0.35;
+      kokkoGroup.add(eggBody);
+
+      // Anneau métal kokko
+      const band = new THREE.Mesh(new THREE.CylinderGeometry(0.29, 0.29, 0.04, 24), ovenBlackMat);
+      band.position.y = 0.35;
+      kokkoGroup.add(band);
+
+      kokkoGroup.position.set(1.05, 0.48, 0.0);
+      scene.add(kokkoGroup);
+
+      // FOUR VONKEN URBAN (Boîte noire avec cheminée)
+      const ovenGroup = new THREE.Group();
+      const ovenBody = new THREE.Mesh(new THREE.BoxGeometry(0.48, 0.28, 0.45), ovenBlackMat);
+      ovenBody.position.y = 0.14;
+      ovenGroup.add(ovenBody);
+
+      const chimney = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.35, 16), ovenBlackMat);
+      chimney.position.set(0, 0.42, -0.08);
+      ovenGroup.add(chimney);
+
+      ovenGroup.position.set(-1.1, 0.85, 0.0);
+      scene.add(ovenGroup);
+
+      // Animation loop
+      function animate() {
+        requestAnimationFrame(animate);
+        controls.update();
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      window.addEventListener('resize', () => {
+        const w = container.clientWidth;
+        const h = container.clientHeight;
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+        renderer.setSize(w, h);
+      });
+    }
+
+    function toggleVoidVisibility() {
+      if (!tilesGroup) return;
+      isVoidVisible = !isVoidVisible;
+      tilesGroup.visible = isVoidVisible;
+      const btn = document.getElementById('btn-toggle-void');
+      btn.innerHTML = isVoidVisible 
+        ? '<i class="fa-solid fa-eye"></i> Afficher/Masquer Dalles' 
+        : '<i class="fa-solid fa-eye-slash"></i> Dalles Masquées (Vue Sous Dalle)';
+    }
+
+    function reset3DCamera() {
+      if (!camera || !controls) return;
+      camera.position.set(2.5, 2.2, 3.8);
+      controls.target.set(0, 0.4, 0);
+    }
+  </script>
+</body>
+</html>

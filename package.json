@@ -4,6 +4,7 @@
   "description": "Projet Cuisine exterieur - Généré avec socle Antigravity",
   "private": true,
   "scripts": {
-    "test": "echo \"Tests validés avec succès\" && exit 0"
+    "test": "echo \"Tests validés avec succès\" && exit 0",
+    "start": "node server.js"
   }
 }
